@@ -26,9 +26,12 @@ output "assets_dist" {
     local.aggregation_tls,
     local.static_manifests,
     local.manifests,
+    local.kube_proxy_manifests,
+    local.coredns_manifests,
     local.flannel_manifests,
     local.calico_manifests,
     local.cilium_manifests,
+    local.kube_router_manifests,
   )
   sensitive = true
 }

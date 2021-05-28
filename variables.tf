@@ -17,6 +17,10 @@ variable "networking" {
   type        = string
   description = "Choice of networking provider (flannel or calico or cilium)"
   default     = "flannel"
+  validation {
+    condition     = contains(["flannel","cilium","calico","kube-router"], var.networking)
+    error_message = "Networking var must be one of flannel, cilium, calico or kube-router."
+  }
 }
 
 variable "network_mtu" {
@@ -69,6 +73,8 @@ variable "container_images" {
     kube_controller_manager = "k8s.gcr.io/kube-controller-manager:v1.21.1"
     kube_scheduler          = "k8s.gcr.io/kube-scheduler:v1.21.1"
     kube_proxy              = "k8s.gcr.io/kube-proxy:v1.21.1"
+    kube_router             = "docker.io/cloudnativelabs/kube-router:v1.2.2"
+    kube_router_cni         = "docker.io/golang:alpine3.13"
   }
 }
 
@@ -88,6 +94,12 @@ variable "enable_reporting" {
 variable "enable_aggregation" {
   type        = bool
   description = "Enable the Kubernetes Aggregation Layer (defaults to false, recommended)"
+  default     = false
+}
+
+variable "kube_router_use_proxy" {
+  type        = bool
+  description = "Enable proxy capability on kube-router (defaults to false, recommended), it will disable kube-proxy"
   default     = false
 }
 

@@ -26,19 +26,42 @@ locals {
     "manifests/${name}" => templatefile(
       "${path.module}/resources/manifests/${name}",
       {
-        kube_proxy_image       = var.container_images["kube_proxy"]
-        coredns_image          = var.container_images["coredns"]
-        control_plane_replicas = max(2, length(var.etcd_servers))
-        pod_cidr               = var.pod_cidr
-        cluster_domain_suffix  = var.cluster_domain_suffix
-        cluster_dns_service_ip = cidrhost(var.service_cidr, 10)
-        trusted_certs_dir      = var.trusted_certs_dir
         server                 = format("https://%s:%s", var.api_servers[0], var.external_apiserver_port)
-        daemonset_tolerations  = var.daemonset_tolerations
         token_id               = random_password.bootstrap-token-id.result
         token_secret           = random_password.bootstrap-token-secret.result
       }
     )
+  }
+
+  # Kubernetes coredns manifests map
+  # { manifests/manifest.yaml => content }
+  coredns_manifests = {
+    for name in fileset("${path.module}/resources/coredns", "*.yaml") :
+    "manifests/coredns/${name}" => templatefile(
+      "${path.module}/resources/coredns/${name}",
+      {
+        coredns_image          = var.container_images["coredns"]
+        cluster_dns_service_ip = cidrhost(var.service_cidr, 10)
+        cluster_domain_suffix  = var.cluster_domain_suffix
+        control_plane_replicas = max(2, length(var.etcd_servers))
+      }
+    )
+  }
+
+  # Kubernetes kube-proxy manifests map
+  # { manifests/manifest.yaml => content }
+  kube_proxy_manifests = {
+    for name in fileset("${path.module}/resources/kube-proxy", "*.yaml") :
+    "manifests/kube-proxy/${name}" => templatefile(
+      "${path.module}/resources/kube-proxy/${name}",
+      {
+        kube_proxy_image       = var.container_images["kube_proxy"]
+        pod_cidr               = var.pod_cidr
+        trusted_certs_dir      = var.trusted_certs_dir
+        daemonset_tolerations  = var.daemonset_tolerations
+      }
+    )
+    if var.kube_router_use_proxy == false
   }
 }
 

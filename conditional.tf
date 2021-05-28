@@ -2,10 +2,10 @@
 
 locals {
   # flannel manifests map
-  # { manifests-networking/manifest.yaml => content }
+  # { manifests/networking/manifest.yaml => content }
   flannel_manifests = {
     for name in fileset("${path.module}/resources/flannel", "*.yaml") :
-    "manifests-networking/${name}" => templatefile(
+    "manifests/networking/${name}" => templatefile(
       "${path.module}/resources/flannel/${name}",
       {
         flannel_image         = var.container_images["flannel"]
@@ -18,10 +18,10 @@ locals {
   }
 
   # calico manifests map
-  # { manifests-networking/manifest.yaml => content }
+  # { manifests/networking/manifest.yaml => content }
   calico_manifests = {
     for name in fileset("${path.module}/resources/calico", "*.yaml") :
-    "manifests-networking/${name}" => templatefile(
+    "manifests/networking/${name}" => templatefile(
       "${path.module}/resources/calico/${name}",
       {
         calico_image                    = var.container_images["calico"]
@@ -41,10 +41,10 @@ locals {
   }
 
   # cilium manifests map
-  # { manifests-networking/manifest.yaml => content }
+  # { manifests/networking/manifest.yaml => content }
   cilium_manifests = {
     for name in fileset("${path.module}/resources/cilium", "**/*.yaml") :
-    "manifests-networking/${name}" => templatefile(
+    "manifests/networking/${name}" => templatefile(
       "${path.module}/resources/cilium/${name}",
       {
         cilium_agent_image    = var.container_images["cilium_agent"]
@@ -54,6 +54,24 @@ locals {
       }
     )
     if var.networking == "cilium"
+  }
+
+  # kube-router manifests map
+  # { manifests/networking/manifest.yaml => content }
+  kube_router_manifests = {
+    for name in fileset("${path.module}/resources/kube-router", "*.yaml") :
+    "manifests/networking/${name}" => templatefile(
+      "${path.module}/resources/kube-router/${name}",
+      {
+        kube_router_image          = var.container_images["kube_router"]
+        kube_router_cni_image      = var.container_images["kube_router_cni"]
+        server                     = format("https://%s:%s", var.api_servers[0], var.external_apiserver_port)
+        pod_cidr                   = var.pod_cidr
+        kube_router_proxy          = var.kube_router_use_proxy ? "--run-service-proxy=true" : ""
+        daemonset_tolerations      = var.daemonset_tolerations
+      }
+    )
+    if var.networking == "kube-router"
   }
 }
 
