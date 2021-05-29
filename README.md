@@ -2,6 +2,12 @@
 
 `terraform-render-bootstrap` is a Terraform module that renders TLS certificates, static pods, and manifests for bootstrapping a Kubernetes cluster.
 
+## This Fork
+
+Adds kube-router to the mix and a small change in the organization of manifests to enable the possibility to disable kube-proxy and use proxy feature of kube-router.
+TODO: deploy an image with kube-router plugins so that we do not compile them on init.
+WARNING: because of the modification the poseidon/typhoon is no longer compatible you need to use MarianU/typhoon fork.
+
 ## Audience
 
 `terraform-render-bootstrap` is a low-level component of the [Typhoon](https://github.com/poseidon/typhoon) Kubernetes distribution. Use Typhoon modules to create and manage Kubernetes clusters across supported platforms. Use the bootstrap module if you'd like to customize a Kubernetes control plane or build your own distribution.
