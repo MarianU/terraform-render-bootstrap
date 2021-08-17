@@ -18,7 +18,7 @@ spec:
         tier: node
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
+        prometheus.io/port: "20245"
     spec:
       priorityClassName: system-node-critical
       serviceAccountName: kube-router
@@ -31,6 +31,7 @@ spec:
         - "--run-firewall=true"
         - "--bgp-graceful-restart=true"
         - "--kubeconfig=/var/lib/kube-router/kubeconfig"
+        - "--metrics-port=20245"
         - "${kube_router_proxy}"
         env:
         - name: NODE_NAME
@@ -89,9 +90,9 @@ spec:
           fi;
           if [ ! -f /opt/cni/bin/bridge ]; then
             apk add gcc build-base ;
-            go install --ldflags "-linkmode external -extldflags -static" github.com/containernetworking/plugins/plugins/ipam/host-local@v0.9.1 ;
-            go install --ldflags "-linkmode external -extldflags -static" github.com/containernetworking/plugins/plugins/main/bridge@v0.9.1 ;
-            go install --ldflags "-linkmode external -extldflags -static" github.com/containernetworking/plugins/plugins/main/loopback@v0.9.1 ;
+            go install --ldflags "-linkmode external -extldflags -static" github.com/containernetworking/plugins/plugins/ipam/host-local@v1.0.0 ;
+            go install --ldflags "-linkmode external -extldflags -static" github.com/containernetworking/plugins/plugins/main/bridge@v1.0.0 ;
+            go install --ldflags "-linkmode external -extldflags -static" github.com/containernetworking/plugins/plugins/main/loopback@v1.0.0 ;
             mv /go/bin/bridge /opt/cni/bin/ ;
             mv /go/bin/host-local /opt/cni/bin/ ;
             mv /go/bin/loopback /opt/cni/bin/ ;

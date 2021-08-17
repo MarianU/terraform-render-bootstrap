@@ -62,18 +62,18 @@ variable "container_images" {
   description = "Container images to use"
 
   default = {
-    calico                  = "quay.io/calico/node:v3.19.1"
-    calico_cni              = "quay.io/calico/cni:v3.19.1"
-    cilium_agent            = "quay.io/cilium/cilium:v1.10.1"
-    cilium_operator         = "quay.io/cilium/operator-generic:v1.10.1"
-    coredns                 = "k8s.gcr.io/coredns/coredns:v1.8.0"
+    calico                  = "quay.io/calico/node:v3.19.2"
+    calico_cni              = "quay.io/calico/cni:v3.19.2"
+    cilium_agent            = "quay.io/cilium/cilium:v1.10.3"
+    cilium_operator         = "quay.io/cilium/operator-generic:v1.10.3"
+    coredns                 = "k8s.gcr.io/coredns/coredns:v1.8.4"
     flannel                 = "quay.io/coreos/flannel:v0.13.0"
     flannel_cni             = "quay.io/poseidon/flannel-cni:v0.4.2"
-    kube_apiserver          = "k8s.gcr.io/kube-apiserver:v1.21.1"
-    kube_controller_manager = "k8s.gcr.io/kube-controller-manager:v1.21.1"
-    kube_scheduler          = "k8s.gcr.io/kube-scheduler:v1.21.1"
-    kube_proxy              = "k8s.gcr.io/kube-proxy:v1.21.1"
-    kube_router             = "docker.io/cloudnativelabs/kube-router:v1.2.2"
+    kube_apiserver          = "k8s.gcr.io/kube-apiserver:v1.22.0"
+    kube_controller_manager = "k8s.gcr.io/kube-controller-manager:v1.22.0"
+    kube_scheduler          = "k8s.gcr.io/kube-scheduler:v1.22.0"
+    kube_proxy              = "k8s.gcr.io/kube-proxy:v1.22.0"
+    kube_router             = "docker.io/cloudnativelabs/kube-router:v1.3.1"
     kube_router_cni         = "docker.io/golang:alpine3.13"
   }
 }
@@ -103,6 +103,12 @@ variable "kube_router_use_proxy" {
   default     = false
 }
 
+variable "daemonset_tolerations" {
+  type        = list(string)
+  description = "List of additional taint keys kube-system DaemonSets should tolerate (e.g. ['custom-role', 'gpu-role'])"
+  default     = []
+}
+
 # unofficial, temporary, may be removed without notice
 
 variable "external_apiserver_port" {
@@ -116,10 +122,3 @@ variable "cluster_domain_suffix" {
   description = "Queries for domains with the suffix will be answered by kube-dns"
   default     = "cluster.local"
 }
-
-variable "daemonset_tolerations" {
-  type        = list(string)
-  description = "List of additional taint keys kube-system DaemonSets should tolerate (e.g. ['custom-role', 'gpu-role'])"
-  default     = []
-}
-
