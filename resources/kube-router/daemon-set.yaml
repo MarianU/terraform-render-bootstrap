@@ -32,7 +32,12 @@ spec:
         - "--bgp-graceful-restart=true"
         - "--kubeconfig=/var/lib/kube-router/kubeconfig"
         - "--metrics-port=20245"
+        - '--nodeport-bindon-all-ip'
         - "${kube_router_proxy}"
+        ports:
+        - name: metrics
+          containerPort: 20245
+          protocol: TCP
         env:
         - name: NODE_NAME
           valueFrom:

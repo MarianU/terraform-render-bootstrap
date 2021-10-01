@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-router
+  namespace: kube-system
+  labels:
+    app.kubernetes.io/name: kube-router
+    k8s-app: kube-router
+spec:
+  ports:
+    - name: metrics
+      protocol: TCP
+      port: 20245
+      targetPort: 20245
+  selector:
+    k8s-app: kube-router
+  clusterIP: None
+  clusterIPs:
+    - None
+  type: ClusterIP
+  sessionAffinity: None
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  internalTrafficPolicy: Cluster
