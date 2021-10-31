@@ -62,17 +62,17 @@ variable "container_images" {
   description = "Container images to use"
 
   default = {
-    calico                  = "quay.io/calico/node:v3.20.0"
-    calico_cni              = "quay.io/calico/cni:v3.20.0"
-    cilium_agent            = "quay.io/cilium/cilium:v1.10.3"
-    cilium_operator         = "quay.io/cilium/operator-generic:v1.10.3"
+    calico                  = "quay.io/calico/node:v3.20.2"
+    calico_cni              = "quay.io/calico/cni:v3.20.2"
+    cilium_agent            = "quay.io/cilium/cilium:v1.10.5"
+    cilium_operator         = "quay.io/cilium/operator-generic:v1.10.5"
     coredns                 = "k8s.gcr.io/coredns/coredns:v1.8.4"
-    flannel                 = "quay.io/coreos/flannel:v0.13.0"
+    flannel                 = "quay.io/coreos/flannel:v0.14.0"
     flannel_cni             = "quay.io/poseidon/flannel-cni:v0.4.2"
-    kube_apiserver          = "k8s.gcr.io/kube-apiserver:v1.22.1"
-    kube_controller_manager = "k8s.gcr.io/kube-controller-manager:v1.22.1"
-    kube_scheduler          = "k8s.gcr.io/kube-scheduler:v1.22.1"
-    kube_proxy              = "k8s.gcr.io/kube-proxy:v1.22.1"
+    kube_apiserver          = "k8s.gcr.io/kube-apiserver:v1.22.3"
+    kube_controller_manager = "k8s.gcr.io/kube-controller-manager:v1.22.3"
+    kube_scheduler          = "k8s.gcr.io/kube-scheduler:v1.22.3"
+    kube_proxy              = "k8s.gcr.io/kube-proxy:v1.22.3"
     kube_router             = "docker.io/cloudnativelabs/kube-router:v1.3.1"
     kube_router_cni         = "docker.io/golang:alpine3.13"
   }
@@ -93,8 +93,8 @@ variable "enable_reporting" {
 
 variable "enable_aggregation" {
   type        = bool
-  description = "Enable the Kubernetes Aggregation Layer (defaults to false, recommended)"
-  default     = false
+  description = "Enable the Kubernetes Aggregation Layer (defaults to true)"
+  default     = true
 }
 
 variable "kube_router_use_proxy" {
